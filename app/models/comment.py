@@ -1,4 +1,4 @@
-from models import db
+from ..extensions import db
 from datetime import datetime
 
 class Comment(db.Model):
@@ -9,8 +9,8 @@ class Comment(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)
 
     def __repr__(self):
         return f'<Comment {self.id} by User {self.user_id} on Post {self.post_id}>'
