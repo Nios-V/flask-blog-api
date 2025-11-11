@@ -3,6 +3,7 @@ from flask_cors import CORS
 from .config import Config
 from .extensions import db, migrate, jwt
 from sqlalchemy import text
+from .blueprints import register_blueprints
 
 def create_app():
     app = Flask(__name__)
@@ -12,5 +13,7 @@ def create_app():
     migrate.init_app(app, db)
     jwt.init_app(app)
     CORS(app) # TODO: Limit CORS origins
+
+    register_blueprints(app)
 
     return app
