@@ -12,13 +12,23 @@ class Service:
         """Get a single record by ID."""
         return self.model.query.get(id)
     
+    def before_create(self, data):
+        """Hook method to modify data or validate before creation."""
+        return data
+    
     def create(self, data):
         """Create a new record."""
+        data = self.before_create(data)
         record = self.model(**data)
         db.session.add(record)
         db.session.commit()
+        self.after_create(record)
         return record
     
+    def after_create(self, record):
+        """Hook method to perform actions after creation."""
+        pass
+
     def update(self, id, data):
         """Update an existing record by ID."""
         record = self.get_by_id(id)
