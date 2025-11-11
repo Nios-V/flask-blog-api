@@ -8,18 +8,26 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(128), nullable=False)
+    _password = db.Column("password", db.String(255), nullable=False)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     updated_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
     posts = db.relationship('Post', backref='author', lazy=True, cascade="all, delete-orphan")
     comments = db.relationship('Comment', backref='author', lazy=True, cascade="all, delete-orphan")
 
+    @property
+    def password(self):
+        raise AttributeError('Password hashes are not readable attributes.')
+    
+    @password.setter
+    def password(self, password):
+        self.set_password(password)
+
     def set_password(self, password):
-        self.password = generate_password_hash(password)
+        self._password = generate_password_hash(password)
 
     def check_password_hash(self, password):
-        return check_password_hash(self.password, password)
+        return check_password_hash(self._password, password)
 
     def __repr__(self):
         return f'<User {self.username}>'
