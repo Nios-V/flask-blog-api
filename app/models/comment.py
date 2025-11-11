@@ -14,3 +14,13 @@ class Comment(db.Model):
 
     def __repr__(self):
         return f'<Comment {self.id} by User {self.user_id} on Post {self.post_id}>'
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'content': self.content,
+            'created_at': self.created_at.isoformat(),
+            'updated_at': self.updated_at.isoformat(),
+            'user_id': self.user_id,
+            'post_id': self.post_id
+        }
