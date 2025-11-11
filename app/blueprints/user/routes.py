@@ -1,10 +1,33 @@
 from flask import jsonify, request
 from . import user_bp
+from flasgger import swag_from
 from app.services.user_service import UserService
 
 service = UserService()
 
 @user_bp.route('/', methods=['GET'])
+@swag_from({
+    'tags': ['Users'],
+    'description': 'Get a list of all users',
+    'responses': {
+        200: {
+            'description': 'A list of users',
+            'schema': {
+                'type': 'array',
+                'items': {
+                    'type': 'object',
+                    'properties': {
+                        'id': {'type': 'integer'},
+                        'username': {'type': 'string'},
+                        'email': {'type': 'string'},
+                        'created_at': {'type': 'string', 'format': 'date-time'},
+                        'updated_at': {'type': 'string', 'format': 'date-time'}
+                    }
+                }
+            }
+        }
+    }
+})
 def get_users():
     users = service.get_all()
     return jsonify([user.to_dict() for user in users]), 200

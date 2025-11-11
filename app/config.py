@@ -8,3 +8,7 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = True
     JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
+    SWAGGER = {
+        'title': 'Blog API',
+        'uiversion': 3
+    }
